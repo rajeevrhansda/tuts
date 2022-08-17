@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import {update} from './redux/userSlice'
+import {update, remove} from './redux/userSlice'
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -10,6 +10,10 @@ function App() {
   const handleUpdate = (e)=>{
     e.preventDefault();
     dispatch(update({name, email}));
+  }
+  const handleClear = (e)=>{
+    e.preventDefault();
+    dispatch(remove());
   }
   return (
     <div className="app">
@@ -26,6 +30,7 @@ function App() {
       <button onClick={handleUpdate}>Update</button>
       <h2>name:{user.name}</h2>
       <h2>email:{user.email}</h2>
+      <button onClick={handleClear}>Clear</button>
     </div>
   );
 }
