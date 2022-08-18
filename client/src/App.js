@@ -1,36 +1,41 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import {update, remove} from './redux/userSlice'
+import { updateUser } from './redux/apiCalls';
 
 function App() {
-  const user = useSelector((state) => state.user);
+  const { userInfo, pending, error } = useSelector((state) => state.user);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const dispatch = useDispatch()
-  const handleUpdate = (e)=>{
+  const handleUpdate = (e) => {
     e.preventDefault();
-    dispatch(update({name, email}));
+    updateUser({ name, email }, dispatch);
   }
-  const handleClear = (e)=>{
+  const handleClear = (e) => {
     e.preventDefault();
-    dispatch(remove());
+    // dispatch(remove());
   }
   return (
     <div className="app">
       <input
-        placeholder={user.name}
-        onChange={(e)=> setName(e.target.value)}
+        placeholder={userInfo.name}
+        onChange={(e) => setName(e.target.value)}
         value={name}
       />
       <input
-        placeholder={user.email}
-        onChange={(e)=> setEmail(e.target.value)}
+        placeholder={userInfo.email}
+        onChange={(e) => setEmail(e.target.value)}
         value={email}
       />
       <button onClick={handleUpdate}>Update</button>
-      <h2>name:{user.name}</h2>
-      <h2>email:{user.email}</h2>
-      <button onClick={handleClear}>Clear</button>
+      <h2>name:{userInfo.name}</h2>
+      <h2>email:{userInfo.email}</h2>
+      <button
+        onClick={handleClear}
+        disabled={pending}
+      >Clear</button>
+      {error && <span>Something went wrong</span>}
+      {pending === false && <span>Account updated successfully </span> }
     </div>
   );
 }
